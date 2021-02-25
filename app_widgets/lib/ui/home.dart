@@ -7,8 +7,13 @@ class Home extends StatelessWidget {
       alignment: Alignment.center,
       color: Colors.deepOrangeAccent,
       child: Text(
-        'pizza',
+        'Pizza',
         textDirection: TextDirection.ltr,
+        style: TextStyle(
+            fontSize: 50.0,
+            decoration: TextDecoration.none,
+            fontFamily: 'Oxygen',
+            fontWeight: FontWeight.normal),
       ),
     );
   }
