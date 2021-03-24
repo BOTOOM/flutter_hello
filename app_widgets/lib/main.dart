@@ -4,6 +4,6 @@ import './ui//home.dart';
 void main() {
   runApp(new MaterialApp(
     title: 'simple Layouts',
-    home: new Home(),
+    home: new DropDownDemo(),
   ));
 }

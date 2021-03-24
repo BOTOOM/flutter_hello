@@ -22,11 +22,12 @@ class TodoDetail extends StatefulWidget {
   State<StatefulWidget> createState() => TodoDetailState(todo);
 }
 
-class TodoDetailState extends State {
+class TodoDetailState extends State<TodoDetail> {
+  String _chosenValue;
   Todo todo;
   TodoDetailState(this.todo);
-  final List<String> _priorities = ["High", "Medium", "Low"];
-  String _priority = "Low";
+  final _priorities = ["High", "Medium", "Low"];
+  String _priority;
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
@@ -57,6 +58,7 @@ class TodoDetailState extends State {
                 TextField(
                   controller: titleController,
                   style: textStyle,
+                  onChanged: (value) => updateTitle(),
                   decoration: InputDecoration(
                       labelStyle: textStyle,
                       labelText: 'Title',
@@ -68,6 +70,7 @@ class TodoDetailState extends State {
                   child: TextField(
                     controller: descriptionController,
                     style: textStyle,
+                    onChanged: (value) => updateDescription(),
                     decoration: InputDecoration(
                         labelStyle: textStyle,
                         labelText: 'Description',
@@ -76,18 +79,23 @@ class TodoDetailState extends State {
                   ),
                 ),
                 ListTile(
-                    title: DropdownButton<String>(
-                        icon: const Icon(Icons.arrow_downward),
-                        items: _priorities
-                            .map<DropdownMenuItem<String>>((String value1) {
-                          debugPrint('items S ' + value1);
-                          return DropdownMenuItem<String>(
-                            value: value1,
-                            child: Text(value1),
-                          );
-                        }).toList(),
-                        value: "Low",
-                        onChanged: null))
+                  title: DropdownButton<String>(
+                      icon: const Icon(Icons.arrow_downward),
+                      items: _priorities.map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      value: _priority,
+                      style: textStyle,
+                      onChanged: (value) {
+                        setState(() {
+                          updatePriority(value);
+                          _priority = retrivePriority(todo.priority);
+                        });
+                      }),
+                )
               ],
             )
           ]),
@@ -130,7 +138,9 @@ class TodoDetailState extends State {
     Navigator.pop(context, true);
   }
 
-  void uodatePriority(String value) {
+  void updatePriority(String value) {
+    debugPrint('update' + value);
+
     switch (value) {
       case 'High':
         todo.priority = 1;
@@ -143,5 +153,19 @@ class TodoDetailState extends State {
         break;
       default:
     }
+  }
+
+  String retrivePriority(int value) {
+    debugPrint('retrivePriority ' + _priorities[value - 1]);
+
+    return _priorities[value - 1];
+  }
+
+  void updateTitle() {
+    todo.title = titleController.text;
+  }
+
+  void updateDescription() {
+    todo.description = descriptionController.text;
   }
 }
